@@ -6,9 +6,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.student</groupId>
-    <artifactId>voting-eligibility-system</artifactId>
+    <artifactId>course-registration-system</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>voting-eligibility-system</name>
+    <name>course-registration-system</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

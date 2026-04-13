@@ -1,8 +1,8 @@
 package com.student;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
@@ -11,50 +11,42 @@ import org.junit.Test;
 public class AppTest {
 
     @Test
-    public void testEligibleVoter() {
-        Voter voter = new Voter("Priya", 25, "Indian", "IN12345", true);
-        assertTrue(voter.isEligible());
-        assertEquals(0, voter.getIneligibilityReasons().size());
+    public void testTotalCreditsCalculation() {
+        Student student = new Student("Maya", "S102");
+        Course course1 = new Course("Mathematics", 4);
+        Course course2 = new Course("Physics", 5);
+        Course course3 = new Course("Chemistry", 6);
+        CourseRegistration registration = new CourseRegistration(student, List.of(course1, course2, course3));
+
+        assertEquals(15, registration.getTotalCredits());
     }
 
     @Test
-    public void testUnderageVoter() {
-        Voter voter = new Voter("Amit", 16, "Indian", "IN54321", true);
-        assertFalse(voter.isEligible());
-        List<String> reasons = voter.getIneligibilityReasons();
-        assertEquals(1, reasons.size());
-        assertEquals("Underage: must be at least 18 years old.", reasons.get(0));
+    public void testEligibilityWhenCreditsAreAtLeastMinimum() {
+        Student student = new Student("Neeraj", "S103");
+        CourseRegistration registration = new CourseRegistration(student, List.of(new Course("Biology", 7), new Course("English", 8)));
+
+        assertTrue(registration.isEligible());
     }
 
     @Test
-    public void testNonCitizenVoter() {
-        Voter voter = new Voter("John", 30, "American", "IN56789", true);
-        assertFalse(voter.isEligible());
-        List<String> reasons = voter.getIneligibilityReasons();
-        assertEquals(1, reasons.size());
-        assertEquals("Not a citizen of India.", reasons.get(0));
+    public void testIneligibilityWhenCreditsAreBelowMinimum() {
+        Student student = new Student("Rina", "S104");
+        CourseRegistration registration = new CourseRegistration(student, List.of(new Course("History", 5), new Course("Geography", 4)));
+
+        assertFalse(registration.isEligible());
     }
 
     @Test
-    public void testInvalidIdVoter() {
-        Voter voter = new Voter("Sita", 28, "Indian", "IN00000", false);
-        assertFalse(voter.isEligible());
-        List<String> reasons = voter.getIneligibilityReasons();
-        assertEquals(1, reasons.size());
-        assertEquals("Invalid voter ID.", reasons.get(0));
-    }
+    public void testStudentAndCourseDetailsAreStoredCorrectly() {
+        Student student = new Student("Asha", "S105");
+        Course course = new Course("Computer Science", 5);
+        CourseRegistration registration = new CourseRegistration(student, List.of(course));
 
-    @Test
-    public void testMultipleIneligibilityReasons() {
-        Voter voter = new Voter("Ravi", 15, "Pakistani", "IN00000", false);
-        assertFalse(voter.isEligible());
-        List<String> reasons = voter.getIneligibilityReasons();
-        assertEquals(3, reasons.size());
-    }
-
-    @Test
-    public void testIndianCitizenshipRecognizedForIndiaKeyword() {
-        Voter voter = new Voter("Neha", 22, "India", "IN99999", true);
-        assertTrue(voter.isEligible());
+        assertEquals("Asha", registration.getStudent().getName());
+        assertEquals("S105", registration.getStudent().getStudentId());
+        assertEquals(1, registration.getCourses().size());
+        assertEquals("Computer Science", registration.getCourses().get(0).getName());
+        assertEquals(5, registration.getCourses().get(0).getCredits());
     }
 }

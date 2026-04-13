@@ -4,19 +4,37 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                script {
+                    try {
+                        checkout scm
+                    } catch (err) {
+                        git branch: 'main', url: 'https://github.com/pawarmayuresh/SIMPLE-MAVEN-APPLICATION.git'
+                    }
+                }
             }
         }
 
         stage('Build') {
             steps {
-                sh 'mvn -B -DskipTests clean compile'
+                script {
+                    if (isUnix()) {
+                        sh 'mvn -B -DskipTests clean compile'
+                    } else {
+                        bat 'mvn -B -DskipTests clean compile'
+                    }
+                }
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn -B test'
+                script {
+                    if (isUnix()) {
+                        sh 'mvn -B test'
+                    } else {
+                        bat 'mvn -B test'
+                    }
+                }
             }
         }
     }

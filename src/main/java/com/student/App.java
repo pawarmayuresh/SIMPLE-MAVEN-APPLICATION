@@ -6,73 +6,68 @@ import java.util.Scanner;
 
 public class App {
 
-    private static final String COUNTRY = "Indian";
-
-    public static boolean isEligibleToVote(Voter voter) {
-        return voter != null && voter.isEligible();
-    }
-
-    public static Voter readVoter(Scanner scanner, int index) {
-        System.out.printf("\nEnter details for voter %d:\n", index);
+    public static Student readStudent(Scanner scanner) {
+        System.out.println("Enter student details:");
         System.out.print("  Name: ");
         String name = scanner.nextLine().trim();
 
-        System.out.print("  Age: ");
-        int age = Integer.parseInt(scanner.nextLine().trim());
+        System.out.print("  Student ID: ");
+        String studentId = scanner.nextLine().trim();
 
-        System.out.print("  Citizenship: ");
-        String citizenship = scanner.nextLine().trim();
-
-        System.out.print("  Voter ID: ");
-        String voterId = scanner.nextLine().trim();
-
-        System.out.print("  Is the Voter ID valid? (yes/no): ");
-        String validInput = scanner.nextLine().trim().toLowerCase();
-        boolean idValid = "yes".equals(validInput) || "true".equals(validInput) || "y".equals(validInput);
-
-        return new Voter(name, age, citizenship, voterId, idValid);
+        return new Student(name, studentId);
     }
 
-    public static void printEligibilityReport(List<Voter> voters) {
-        System.out.println("\nVoting Eligibility Report");
-        System.out.println("===========================");
+    public static Course readCourse(Scanner scanner, int index) {
+        System.out.printf("\nEnter details for subject %d:\n", index);
+        System.out.print("  Subject name: ");
+        String name = scanner.nextLine().trim();
 
-        for (Voter voter : voters) {
-            System.out.println();
-            System.out.println("Voter Name : " + voter.getName());
-            System.out.println("Age        : " + voter.getAge());
-            System.out.println("Citizenship: " + voter.getCitizenship());
-            System.out.println("Voter ID   : " + voter.getVoterId());
+        System.out.print("  Credit value: ");
+        int credits = Integer.parseInt(scanner.nextLine().trim());
 
-            if (isEligibleToVote(voter)) {
-                System.out.println("Result     : Eligible to vote");
-            } else {
-                System.out.println("Result     : Not eligible to vote");
-                System.out.println("Reasons:");
-                for (String reason : voter.getIneligibilityReasons()) {
-                    System.out.println("  - " + reason);
-                }
-            }
+        return new Course(name, credits);
+    }
+
+    public static List<Course> readCourses(Scanner scanner, int courseCount) {
+        List<Course> courses = new ArrayList<>();
+        for (int i = 1; i <= courseCount; i++) {
+            courses.add(readCourse(scanner, i));
         }
+        return courses;
+    }
+
+    public static void printRegistrationReport(CourseRegistration registration) {
+        Student student = registration.getStudent();
+
+        System.out.println("\nCourse Registration Summary");
+        System.out.println("===========================");
+        System.out.println("Student name : " + student.getName());
+        System.out.println("Student ID   : " + student.getStudentId());
+        System.out.println("\nRegistered subjects:");
+
+        for (Course course : registration.getCourses()) {
+            System.out.printf("  - %s (%d credits)%n", course.getName(), course.getCredits());
+        }
+
+        System.out.println("\nTotal credits: " + registration.getTotalCredits());
+        System.out.println("Eligibility  : " + (registration.isEligible() ? "Eligible" : "Not eligible"));
     }
 
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
-            System.out.println("Voting Eligibility System");
-            System.out.println("--------------------------");
-            System.out.print("Enter number of voters: ");
-            int voterCount = Integer.parseInt(scanner.nextLine().trim());
+            System.out.println("Course Registration System");
+            System.out.println("---------------------------");
+            System.out.print("Enter number of subjects to register: ");
+            int courseCount = Integer.parseInt(scanner.nextLine().trim());
 
-            if (voterCount <= 0) {
-                throw new IllegalArgumentException("Number of voters must be at least 1.");
+            if (courseCount <= 0) {
+                throw new IllegalArgumentException("Number of subjects must be at least 1.");
             }
 
-            List<Voter> voters = new ArrayList<>();
-            for (int i = 1; i <= voterCount; i++) {
-                voters.add(readVoter(scanner, i));
-            }
-
-            printEligibilityReport(voters);
+            Student student = readStudent(scanner);
+            List<Course> courses = readCourses(scanner, courseCount);
+            CourseRegistration registration = new CourseRegistration(student, courses);
+            printRegistrationReport(registration);
         } catch (IllegalArgumentException e) {
             System.err.println("Error: " + e.getMessage());
         }

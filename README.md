@@ -1,25 +1,16 @@
 # SIMPLE-MAVEN-APPLICATION
 
-This is a simple Java Maven application that evaluates voter eligibility for the Indian election system.
+This Maven project implements a Course Registration System.
 
 ## Features
 
-- Defines a `Voter` class with fields for:
-  - name
-  - age
-  - citizenship
-  - voter ID
-  - ID validity status
-- Reads input for one or more voters
-- Validates eligibility using these rules:
-  - at least 18 years old
-  - Indian citizen
-  - valid voter ID
-- Prints an eligibility report for each voter and lists the reason(s) when ineligible
+- Stores student details: name and student ID
+- Stores selected subjects with credit values
+- Calculates total registered credits
+- Determines eligibility if total credits are 15 or more
+- Displays student details, registered subjects, total credits, and eligibility status
 
-## Usage
-
-Run the application and follow the prompts:
+## Run the application
 
 ```bash
 mvn compile exec:java -Dexec.mainClass="com.student.App"
@@ -27,8 +18,9 @@ mvn compile exec:java -Dexec.mainClass="com.student.App"
 
 Example input flow:
 
-- Enter number of voters
-- Enter name, age, citizenship, voter ID, and whether the voter ID is valid
+1. Enter number of subjects to register
+2. Enter student name and student ID
+3. Enter each subject name and credit value
 
 ## Build and test
 
@@ -36,12 +28,10 @@ Example input flow:
 mvn test
 ```
 
-## Jenkins Pipeline
+## Jenkins integration
 
-A `Jenkinsfile` is included for CI/CD. It performs:
+Use the provided `Jenkinsfile` in a Jenkins Pipeline job. It:
 
-- checkout from source control
-- Maven build and test
-- publishing JUnit test results
-
-Use the pipeline definition from `Jenkinsfile` in your Jenkins Pipeline project.
+- checks out the repository
+- runs Maven build and tests
+- publishes JUnit test results
