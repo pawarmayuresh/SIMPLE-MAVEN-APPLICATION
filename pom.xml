@@ -6,9 +6,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.student</groupId>
-    <artifactId>electricity-bill-calculator</artifactId>
+    <artifactId>voting-eligibility-system</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>electricity-bill-calculator</name>
+    <name>voting-eligibility-system</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
